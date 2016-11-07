@@ -1,99 +1,52 @@
 package min3d.vos;
 
-import min3d.interfaces.IDirtyManaged;
-import min3d.interfaces.IDirtyParent;
+import android.opengl.Matrix;
 
 /**
  * 'Managed' VO for the view frustrum. Used by Camera.
  */
-public class FrustumManaged extends AbstractDirtyManaged 
+public class FrustumManaged
 {
-	private float _shortSideLength;
-	private float _horizontalCenter;
-	private float _verticalCenter;
-	private float _zNear;
-	private float _zFar;
+//	private float _shortSideLength;
+//	private float _horizontalCenter;
+//	private float _verticalCenter;
+//	private float _zNear;
+//	private float _zFar;
+
+	private static final float DEFAULT_FOVY = 75.f;
+	private static final float DEFAULT_NEAR = 1.0f;
+	private static final float DEFAULT_FAR = 100.0f;
+
+	private float[] mMatrix = new float[16];
 	
 	
-	public FrustumManaged(IDirtyParent $parent)
+	public FrustumManaged(int widthPixel, int heightPixel)
 	{
-		super($parent);
+		/*super($parent);
 		
 		_horizontalCenter = 0f;
 		_verticalCenter = 0f;
 		_shortSideLength = 1.0f;
 		
 		_zNear = 1.0f;
-		_zFar = 100.0f;
+		_zFar = 100.0f;*/
+
+		this(DEFAULT_FOVY, (float)widthPixel / (float)heightPixel, DEFAULT_NEAR, DEFAULT_FAR);
+
 	}
 
-	public FrustumManaged(float $horizontalCenter, float $verticalCenter, float $shortSideLength, float $zNear, float $zFar, IDirtyParent $parent)
+	public FrustumManaged(float fovy, float aspect, float near, float far)
 	{
-		super($parent);
-		
-		_horizontalCenter = $horizontalCenter;
-		_verticalCenter = $verticalCenter;
-		_shortSideLength = $shortSideLength;
-		
-		_zNear = $zNear;
-		_zFar = $zFar;
-	}
-	
-	/**
-	 * Defines the length of the shorter side of the horizontal and vertical dimensions. 
-	 * (The longer side will be automatically adjusted to preserve pixel aspect ratio)
-	 */
-	public float shortSideLength() {
-		return _shortSideLength;
+		Matrix.perspectiveM(mMatrix, 0, fovy, aspect, near, far);
 	}
 
-	public void shortSideLength(float shortSideLength) {
-		_shortSideLength = shortSideLength;
-		setDirtyFlag();
+	public FrustumManaged(float fovy, int widthPixel, int heightPixel, float near, float far)
+	{
+		Matrix.perspectiveM(mMatrix, 0, fovy, (float)widthPixel / (float)heightPixel, near, far);
 	}
 
-	public float horizontalCenter() {
-		return _horizontalCenter;
+	public float[] getProjectionMatrix() {
+		return mMatrix;
 	}
 
-	public void horizontalCenter(float horizontalCenter) {
-		_horizontalCenter = horizontalCenter;
-		setDirtyFlag();
-	}
-
-	public float verticalCenter() {
-		return _verticalCenter;
-	}
-
-	public void verticalCenter(float verticalCenter) {
-		_verticalCenter = verticalCenter;
-		setDirtyFlag();
-	}
-
-	/**
-	 * Corresponds to OpenGL glFrustumf param
-	 */
-	public float zNear() {
-		return _zNear;
-	}
-
-	public void zNear(float zNear) {
-		_zNear = zNear;
-		setDirtyFlag();
-	}
-
-	/**
-	 * Corresponds to OpenGL glFrustumf param
-	 */
-	public float zFar() {
-		return _zFar;
-	}
-
-	public void zFar(float zFar) {
-		_zFar = zFar;
-		setDirtyFlag();
-	}
-	
-	//
-	
 }
