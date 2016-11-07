@@ -1,13 +1,16 @@
 apply plugin: 'com.android.application'
-
 android {
     compileSdkVersion 17
     buildToolsVersion "24.0.3"
 
     defaultConfig {
         applicationId "min3d.sampleProject1"
-        minSdkVersion 4
-        targetSdkVersion 4
+        minSdkVersion 14
+        targetSdkVersion 17
+    }
+
+    lintOptions {
+        abortOnError false
     }
 
     buildTypes {
@@ -16,4 +19,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+}
+
+dependencies {
+    compile project(':min3dlib')
 }
