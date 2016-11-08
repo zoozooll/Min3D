@@ -316,6 +316,7 @@ public class Object3d implements Cloneable {
     public void position(Number3d position) {
         position(position.x, position.y , position.z);
     }
+
     public void position(float x, float y, float z) {
         Matrix.translateM(modelMatrix, 0, x, y , z);
     }
@@ -418,7 +419,7 @@ public class Object3d implements Cloneable {
     /**
      * Called by Scene
      */
-    void scene(Scene $scene) /*package-private*/ {
+    public void scene(Scene $scene) /*package-private*/ {
         _scene = $scene;
     }
 

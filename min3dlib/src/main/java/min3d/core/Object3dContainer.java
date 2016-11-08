@@ -84,6 +84,13 @@ public class Object3dContainer extends Object3d implements IObject3dContainer {
     }
 
     @Override
+    public void bindData() {
+        for (Object3d o :_children) {
+            o.bindData();
+        }
+    }
+
+    @Override
     public void draw() {
         for (Object3d o :_children) {
             o.draw();

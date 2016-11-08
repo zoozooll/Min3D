@@ -1,9 +1,13 @@
 package min3d.core;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.pm.ConfigurationInfo;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import min3d.Shared;
 import min3d.interfaces.ISceneController;
@@ -76,6 +80,16 @@ public class RendererActivity extends Activity implements ISceneController {
 
         // Example of enabling logging of GL operations
         // _glSurfaceView.setDebugFlags(GLSurfaceView.DEBUG_CHECK_GL_ERROR | GLSurfaceView.DEBUG_LOG_GL_CALLS);
+
+        final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
+        final boolean supportsEs2 = configurationInfo.reqGlEsVersion >= 0x20000;
+        Log.d("MainActivity", "support GLES Version " + Integer.toHexString(configurationInfo.reqGlEsVersion));
+        if (supportsEs2)
+        {
+            // Request an OpenGL ES 2.0 compatible context.
+            _glSurfaceView.setEGLContextClientVersion(2);
+        }
     }
 
     protected GLSurfaceView glSurfaceView() {

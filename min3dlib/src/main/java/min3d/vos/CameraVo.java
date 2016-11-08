@@ -14,9 +14,11 @@ public class CameraVo {
 
     public CameraVo() {
         //Matrix.setLookAtM();
+        this(0.f, 0.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f);
     }
 
     public CameraVo(Number3d eye, Number3d target, Number3d up) {
+        super();
         Matrix.setLookAtM(mMatrix, 0, eye.x, eye.y, eye.z,
                 target.x, target.y, target.z,
                 up.x, up.y, up.z);
@@ -25,6 +27,7 @@ public class CameraVo {
     public CameraVo(float eyeX, float eyeY, float eyeZ,
                     float targetX, float targetY, float targetZ,
                     float upX, float upY, float upZ) {
+        super();
         Matrix.setLookAtM(mMatrix, 0, eyeX, eyeY, eyeZ,
                 targetX, targetY, targetZ,
                 upX, upY, upZ);

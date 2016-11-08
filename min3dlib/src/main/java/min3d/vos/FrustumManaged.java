@@ -14,7 +14,7 @@ public class FrustumManaged
 //	private float _zFar;
 
 	private static final float DEFAULT_FOVY = 75.f;
-	private static final float DEFAULT_NEAR = 1.0f;
+	private static final float DEFAULT_NEAR = 0.01f;
 	private static final float DEFAULT_FAR = 100.0f;
 
 	private float[] mMatrix = new float[16];

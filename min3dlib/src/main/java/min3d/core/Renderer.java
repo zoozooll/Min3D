@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
+import android.util.Log;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -12,12 +13,16 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import min3d.Shared;
+import min3d.utils.RendererUtils;
 
 
 public class Renderer implements GLSurfaceView.Renderer {
+
+    private static final String TAG = "Renderer";
+
     public static final int NUMGLES20LIGHTS = 8;
 
-    private Scene _scene;
+    private Scene scene;
     private TextureManager _textureManager;
 
     private float _surfaceAspectRatio;
@@ -37,7 +42,7 @@ public class Renderer implements GLSurfaceView.Renderer {
 
 
     public Renderer(Scene $scene) {
-        _scene = $scene;
+        scene = $scene;
 
         _scratchIntBuffer = IntBuffer.allocate(4);
         _scratchFloatBuffer = FloatBuffer.allocate(4);
@@ -50,29 +55,32 @@ public class Renderer implements GLSurfaceView.Renderer {
     }
 
     public void onSurfaceCreated(GL10 $gl, EGLConfig eglConfig) {
-        RenderCaps.setRenderCaps($gl);
-
+       // RenderCaps.setRenderCaps($gl);
         reset();
-
-        _scene.init();
+        scene.init();
+        RendererUtils.checkGlError("onSurfaceChanged");
     }
 
     public void onSurfaceChanged(GL10 gl, int w, int h) {
+        Log.d(TAG, "onSurfaceChanged " + w + "," + h);
         _surfaceAspectRatio = (float) w / (float) h;
-
         GLES20.glViewport(0, 0, w, h);
-
-        _scene.setViewFrustum(0, 0, w, h);
-        //TODO load view matrix
+        scene.setViewFrustum(0, 0, w, h);
+        RendererUtils.checkGlError("onSurfaceChanged");
     }
 
     public void onDrawFrame(GL10 gl) {
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        GLES20.glClearColor((float)scene.backgroundColor().r() / 255.f,
+                (float)scene.backgroundColor().g() / 255.f,
+                (float)scene.backgroundColor().b() / 255.f,
+                (float)scene.backgroundColor().a() / 255.f);
         // Update 'model'
-        _scene.update();
+        scene.update();
 
         // Update 'view'
-        _scene.drawSetup();
-        _scene.drawScene();
+        scene.drawSetup();
+        scene.drawScene();
 
         if (_logFps) doFps();
     }
@@ -132,7 +140,7 @@ public class Renderer implements GLSurfaceView.Renderer {
 
     private void reset() {
         // Reset TextureManager
-        Shared.textureManager().reset();
+        /*Shared.textureManager().reset();
 
         // Do OpenGL settings which we are using as defaults, or which we will not be changing on-draw
 
@@ -157,7 +165,7 @@ public class Renderer implements GLSurfaceView.Renderer {
         // CCW frontfaces only, by default
         GLES20.glFrontFace(GLES20.GL_CCW);
         GLES20.glCullFace(GLES20.GL_BACK);
-        GLES20.glEnable(GLES20.GL_CULL_FACE);
+        GLES20.glEnable(GLES20.GL_CULL_FACE);*/
 
         //
         // Scene object init only happens here, when we get GL for the first time

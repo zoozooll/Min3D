@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 
 public class AndroidUtils {
 
+
     public static String readRawTextFile(Context context, int resId) {
         InputStream is = context.getResources().openRawResource(resId);
         InputStreamReader reader = new InputStreamReader(is);

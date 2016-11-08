@@ -121,7 +121,10 @@ public class Scene implements IObject3dContainer, IDirtyParent {
     }
 
     public void drawSetup() {
-
+        for (int i = 0, size = _children.size(); i < size; i++) {
+            Object3d o = _children.get(i);
+            o.bindData();
+        }
     }
 
     public void drawScene() {

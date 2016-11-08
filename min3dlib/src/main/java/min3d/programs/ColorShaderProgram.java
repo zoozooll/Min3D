@@ -2,7 +2,12 @@ package min3d.programs;
 
 import android.opengl.GLES20;
 
+import com.mouselee.min3dlib.R;
+
 import java.nio.FloatBuffer;
+
+import min3d.utils.AndroidUtils;
+import min3d.utils.ContextManager;
 
 /**
  * Created by sw on 2016/11/3.
@@ -10,7 +15,7 @@ import java.nio.FloatBuffer;
 
 public class ColorShaderProgram extends ShaderProgram {
 
-    protected static final String U_MATRIX = "m_Matrix";
+    protected static final String U_MATRIX = "u_Matrix";
     protected static final String U_COLOR = "u_Color";
     protected static final String A_POSITION = "a_Position";
     protected static final String U_TEXTURE_UNIT = "u_TextureUnit";
@@ -24,8 +29,9 @@ public class ColorShaderProgram extends ShaderProgram {
     // Attribute locations
     private final int aPositionLocation; // a_Position
 
-    public ColorShaderProgram(String vertexShaderScript, String fragmentShaderScript) {
-        super(vertexShaderScript, fragmentShaderScript);
+    public ColorShaderProgram() {
+        super(AndroidUtils.readRawTextFile(ContextManager.getContext(), R.raw.color_vertex_shader),
+                AndroidUtils.readRawTextFile(ContextManager.getContext(), R.raw.color_fragment_shader));
         uMatrixLocation = GLES20.glGetUniformLocation(program, U_MATRIX);
         uColorLocation = GLES20.glGetUniformLocation(program, U_COLOR);
         aPositionLocation = GLES20.glGetAttribLocation(program, A_POSITION);
@@ -42,5 +48,13 @@ public class ColorShaderProgram extends ShaderProgram {
 
     public void setAttributeVectors(int stride, FloatBuffer buffer) {
         GLES20.glVertexAttribPointer(aPositionLocation, 3, GLES20.GL_FLOAT, false, stride, buffer);
+    }
+
+    public void setEnableAtrirbutePosition(boolean enable) {
+        if (enable) {
+            GLES20.glEnableVertexAttribArray(aPositionLocation);
+        } else {
+            GLES20.glDisableVertexAttribArray(aPositionLocation);
+        }
     }
 }
