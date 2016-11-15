@@ -13,50 +13,50 @@ import min3d.vos.RenderType;
  * @author Lee
  */
 public class Object3d implements Cloneable {
-    private String _name;
+    private String name;
 
-    private RenderType _renderType = RenderType.TRIANGLES;
+    private RenderType renderType = RenderType.TRIANGLES;
 
-    private boolean _isVisible = true;
-    private boolean _vertexColorsEnabled = true;
-    private boolean _doubleSidedEnabled = false;
-    private boolean _texturesEnabled = true;
-    private boolean _normalsEnabled = true;
-    private boolean _ignoreFaces = false;
-    private boolean _colorMaterialEnabled = false;
-    private boolean _lightingEnabled = true;
+    private boolean isVisible = true;
+    private boolean vertexColorsEnabled = true;
+    private boolean doubleSidedEnabled = false;
+    private boolean texturesEnabled = true;
+    private boolean normalsEnabled = true;
+    private boolean ignoreFaces = false;
+    private boolean colorMaterialEnabled = false;
+    private boolean lightingEnabled = true;
 
-    //private Number3d _position = new Number3d(0, 0, 0);
-    //private Number3d _rotation = new Number3d(0, 0, 0);
-    //private Number3d _scale = new Number3d(1, 1, 1);
+    //private Number3d this.position = new Number3d(0, 0, 0);
+    //private Number3d this.rotation = new Number3d(0, 0, 0);
+    //private Number3d this.scale = new Number3d(1, 1, 1);
 
-    private Color4 _defaultColor = new Color4();
+    private Color4 defaultColor = new Color4();
 
-    private float _pointSize = 3f;
-    private boolean _pointSmoothing = true;
-    private float _lineWidth = 1f;
-    private boolean _lineSmoothing = false;
+    private float pointSize = 3f;
+    private boolean pointSmoothing = true;
+    private float lineWidth = 1f;
+    private boolean lineSmoothing = false;
 
 
-    protected ArrayList<Object3d> _children;
+    protected ArrayList<Object3d> children;
 
-    protected Vertices _vertices;
-    protected TextureList _textures;
-    protected FacesBufferedList _faces;
+    protected Vertices vertices;
+    protected TextureList textures;
+    protected FacesBufferedList faces;
 
-    protected boolean _animationEnabled = false;
+    protected boolean animationEnabled = false;
 
-    private Scene _scene;
-    private IObject3dContainer _parent;
+    private Scene scene;
+    private IObject3dContainer parent;
     protected float[] modelMatrix = new float[16];
 
     /**
      * Maximum number of vertices and faces must be specified at instantiation.
      */
     public Object3d(int $maxVertices, int $maxFaces) {
-        _vertices = new Vertices($maxVertices, true, true, true);
-        _faces = new FacesBufferedList($maxFaces);
-        _textures = new TextureList();
+        this.vertices = new Vertices($maxVertices, true, true, true);
+        this.faces = new FacesBufferedList($maxFaces);
+        this.textures = new TextureList();
         Matrix.setIdentityM(modelMatrix, 0);
     }
 
@@ -64,9 +64,9 @@ public class Object3d implements Cloneable {
      * Adds three arguments
      */
     public Object3d(int $maxVertices, int $maxFaces, Boolean $useUvs, Boolean $useNormals, Boolean $useVertexColors) {
-        _vertices = new Vertices($maxVertices, $useUvs, $useNormals, $useVertexColors);
-        _faces = new FacesBufferedList($maxFaces);
-        _textures = new TextureList();
+        this.vertices = new Vertices($maxVertices, $useUvs, $useNormals, $useVertexColors);
+        this.faces = new FacesBufferedList($maxFaces);
+        this.textures = new TextureList();
         Matrix.setIdentityM(modelMatrix, 0);
     }
 
@@ -74,9 +74,9 @@ public class Object3d implements Cloneable {
      * This constructor is convenient for cloning purposes
      */
     public Object3d(Vertices $vertices, FacesBufferedList $faces, TextureList $textures) {
-        _vertices = $vertices;
-        _faces = $faces;
-        _textures = $textures;
+        this.vertices = $vertices;
+        this.faces = $faces;
+        this.textures = $textures;
         Matrix.setIdentityM(modelMatrix, 0);
     }
 
@@ -88,7 +88,7 @@ public class Object3d implements Cloneable {
         if (this.vertices().uvs() != null) this.vertices().uvs().clear();
         if (this.vertices().normals() != null) this.vertices().normals().clear();
         if (this.vertices().colors() != null) this.vertices().colors().clear();
-        if (_textures != null) _textures.clear();
+        if (this.textures != null) this.textures.clear();
 
         if (this.parent() != null) this.parent().removeChild(this);
     }
@@ -108,9 +108,9 @@ public class Object3d implements Cloneable {
     }
 
     public Object3d clone() {
-        Vertices v = _vertices.clone();
-        FacesBufferedList f = _faces.clone();
-        Object3d clone = new Object3d(v, f, _textures);
+        Vertices v = this.vertices.clone();
+        FacesBufferedList f = this.faces.clone();
+        Object3d clone = new Object3d(v, f, this.textures);
         System.arraycopy(modelMatrix,0, clone.modelMatrix,0, modelMatrix.length);
         return clone;
     }
@@ -119,18 +119,18 @@ public class Object3d implements Cloneable {
      * Holds references to vertex position list, vertex u/v mappings list, vertex normals list, and vertex colors list
      */
     public Vertices vertices() {
-        return _vertices;
+        return this.vertices;
     }
 
     /**
      * List of object's faces (ie, index buffer)
      */
     public FacesBufferedList faces() {
-        return _faces;
+        return this.faces;
     }
 
     public TextureList textures() {
-        return _textures;
+        return this.textures;
     }
 
     /**
@@ -138,11 +138,11 @@ public class Object3d implements Cloneable {
      * Default is true.
      */
     public boolean isVisible() {
-        return _isVisible;
+        return this.isVisible;
     }
 
     public void setVisible(Boolean $b) {
-        _isVisible = $b;
+        this.isVisible = $b;
     }
 
     /**
@@ -150,31 +150,31 @@ public class Object3d implements Cloneable {
      * Default is false.
      */
     public boolean doubleSidedEnabled() {
-        return _doubleSidedEnabled;
+        return this.doubleSidedEnabled;
     }
 
     public void doubleSidedEnabled(boolean $b) {
-        _doubleSidedEnabled = $b;
+        this.doubleSidedEnabled = $b;
     }
 
     /**
-     * Determines if object uses GL_COLOR_MATERIAL or not.
+     * Determines if object uses GLthis.COLORthis.MATERIAL or not.
      * Default is false.
      */
     public boolean colorMaterialEnabled() {
-        return _colorMaterialEnabled;
+        return this.colorMaterialEnabled;
     }
 
     public boolean lightingEnabled() {
-        return _lightingEnabled;
+        return this.lightingEnabled;
     }
 
     public void lightingEnabled(boolean $b) {
-        this._lightingEnabled = $b;
+        this.this.lightingEnabled = $b;
     }
 
     public void colorMaterialEnabled(boolean $b) {
-        _colorMaterialEnabled = $b;
+        this.colorMaterialEnabled = $b;
     }
 
     /**
@@ -184,11 +184,11 @@ public class Object3d implements Cloneable {
      * anything during the render loop when it's not necessary.
      */
     public boolean animationEnabled() {
-        return _animationEnabled;
+        return this.animationEnabled;
     }
 
     public void animationEnabled(boolean $b) {
-        _animationEnabled = $b;
+        this.animationEnabled = $b;
     }
 
     /**
@@ -198,11 +198,11 @@ public class Object3d implements Cloneable {
      * Default is true.
      */
     public boolean vertexColorsEnabled() {
-        return _vertexColorsEnabled;
+        return this.vertexColorsEnabled;
     }
 
     public void vertexColorsEnabled(Boolean $b) {
-        _vertexColorsEnabled = $b;
+        this.vertexColorsEnabled = $b;
     }
 
     /**
@@ -210,11 +210,11 @@ public class Object3d implements Cloneable {
      * Default is true.
      */
     public boolean texturesEnabled() {
-        return _texturesEnabled;
+        return this.texturesEnabled;
     }
 
     public void texturesEnabled(Boolean $b) {
-        _texturesEnabled = $b;
+        this.texturesEnabled = $b;
     }
 
     /**
@@ -223,11 +223,11 @@ public class Object3d implements Cloneable {
      * Default is true.
      */
     public boolean normalsEnabled() {
-        return _normalsEnabled;
+        return this.normalsEnabled;
     }
 
     public void normalsEnabled(boolean $b) {
-        _normalsEnabled = $b;
+        this.normalsEnabled = $b;
     }
 
     /**
@@ -236,11 +236,11 @@ public class Object3d implements Cloneable {
      * Default is false.
      */
     public boolean ignoreFaces() {
-        return _ignoreFaces;
+        return this.ignoreFaces;
     }
 
     public void ignoreFaces(boolean $b) {
-        _ignoreFaces = $b;
+        this.ignoreFaces = $b;
     }
 
     /**
@@ -248,66 +248,66 @@ public class Object3d implements Cloneable {
      * Default is TRIANGLES.
      */
     public RenderType renderType() {
-        return _renderType;
+        return this.renderType;
     }
 
     public void renderType(RenderType $type) {
-        _renderType = $type;
+        this.renderType = $type;
     }
 
     /**
      * Convenience 'pass-thru' method
      */
     public Number3dBufferList points() {
-        return _vertices.points();
+        return this.vertices.points();
     }
 
     /**
      * Convenience 'pass-thru' method
      */
     public UvBufferList uvs() {
-        return _vertices.uvs();
+        return this.vertices.uvs();
     }
 
     /**
      * Convenience 'pass-thru' method
      */
     public Number3dBufferList normals() {
-        return _vertices.normals();
+        return this.vertices.normals();
     }
 
     /**
      * Convenience 'pass-thru' method
      */
     public Color4BufferList colors() {
-        return _vertices.colors();
+        return this.vertices.colors();
     }
 
     /**
      * Convenience 'pass-thru' method
      */
     public boolean hasUvs() {
-        return _vertices.hasUvs();
+        return this.vertices.hasUvs();
     }
 
     /**
      * Convenience 'pass-thru' method
      */
     public boolean hasNormals() {
-        return _vertices.hasNormals();
+        return this.vertices.hasNormals();
     }
 
     public boolean hasVertexColors() {
-        return _vertices.hasColors();
+        return this.vertices.hasColors();
     }
 
 
     public Color4 defaultColor() {
-        return _defaultColor;
+        return this.defaultColor;
     }
 
     public void defaultColor(Color4 color) {
-        _defaultColor = color;
+        this.defaultColor = color;
     }
 
     /**
@@ -349,11 +349,11 @@ public class Object3d implements Cloneable {
      * Default is 3.
      */
     public float pointSize() {
-        return _pointSize;
+        return this.pointSize;
     }
 
     public void pointSize(float $n) {
-        _pointSize = $n;
+        this.pointSize = $n;
     }
 
     /**
@@ -362,11 +362,11 @@ public class Object3d implements Cloneable {
      * Default is true.
      */
     public boolean pointSmoothing() {
-        return _pointSmoothing;
+        return this.pointSmoothing;
     }
 
     public void pointSmoothing(boolean $b) {
-        _pointSmoothing = $b;
+        this.pointSmoothing = $b;
     }
 
     /**
@@ -378,11 +378,11 @@ public class Object3d implements Cloneable {
      * 1 to 8 without smoothing, and can only be 1f with smoothing.
      */
     public float lineWidth() {
-        return _lineWidth;
+        return this.lineWidth;
     }
 
     public void lineWidth(float $n) {
-        _lineWidth = $n;
+        this.lineWidth = $n;
     }
 
     /**
@@ -390,43 +390,43 @@ public class Object3d implements Cloneable {
      * Default is false.
      */
     public boolean lineSmoothing() {
-        return _lineSmoothing;
+        return this.lineSmoothing;
     }
 
     public void lineSmoothing(boolean $b) {
-        _lineSmoothing = $b;
+        this.lineSmoothing = $b;
     }
 
     /**
      * Convenience property
      */
     public String name() {
-        return _name;
+        return this.name;
     }
 
     public void name(String $s) {
-        _name = $s;
+        this.name = $s;
     }
 
     public IObject3dContainer parent() {
-        return _parent;
+        return this.parent;
     }
 
     public void parent(IObject3dContainer $container) /*package-private*/ {
-        _parent = $container;
+        this.parent = $container;
     }
 
     /**
      * Called by Scene
      */
     public void scene(Scene $scene) /*package-private*/ {
-        _scene = $scene;
+        this.scene = $scene;
     }
 
     /**
      * Called by DisplayObjectContainer
      */
     public Scene scene() /*package-private*/ {
-        return _scene;
+        return this.scene;
     }
 }
